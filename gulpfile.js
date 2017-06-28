@@ -5,7 +5,8 @@ const gulp = require("gulp"),
     pump = require("pump"),
     uglify = require("gulp-uglify"),
     rename = require("gulp-rename"),
-    sass = require("gulp-sass");
+    sass = require("gulp-sass"),
+    sourceMaps = require("gulp-sourcemaps");
 
 gulp.task("concatScripts", function () {
     //order matters!
@@ -31,7 +32,9 @@ gulp.task("minifyScripts", ["concatScripts"], function () {
 gulp.task("compileSass", function () {
    pump([
        gulp.src("scss/application.scss"),//no need for multiple files since application.scss imports all other scss files
+       sourceMaps.init(),
        sass(),
+       sourceMaps.write('./'),//relative to gulp.dest
        gulp.dest("css/")
     ]);
 });

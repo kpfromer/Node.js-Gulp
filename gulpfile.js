@@ -4,7 +4,8 @@ const gulp = require("gulp"),
     concat = require("gulp-concat"),
     pump = require("pump"),
     uglify = require("gulp-uglify"),
-    rename = require("gulp-rename");
+    rename = require("gulp-rename"),
+    sass = require("gulp-sass");
 
 gulp.task("concatScripts", function () {
     //order matters!
@@ -24,6 +25,14 @@ gulp.task("minifyScripts", ["concatScripts"], function () {
         uglify(),
         rename("app.min.js"),
         gulp.dest('js')
+    ]);
+});
+
+gulp.task("compileSass", function () {
+   pump([
+       gulp.src("scss/application.scss"),//no need for multiple files since application.scss imports all other scss files
+       sass(),
+       gulp.dest("css/")
     ]);
 });
 

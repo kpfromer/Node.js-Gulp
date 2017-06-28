@@ -11,6 +11,7 @@ const gulp = require("gulp"),
 gulp.task("concatScripts", function () {
     //order matters!
     //gulp.src = readable stream of data (a node thing)
+    //NOTE: return acts a promise if you dont have return then gulp doesnt know when the task is done and other task will run
     return pump([
         gulp.src(["js/jquery.js",
             "js/sticky/jquery.sticky.js",
@@ -43,7 +44,7 @@ gulp.task("compileSass", function () {
     ]);
 });
 
+gulp.task("build", ["minifyScripts", "compileSass"]);
+
 // second param is the dependencies (things to run before running task)
-gulp.task("default", ["hello", "secondTask"], function () {
-    console.log("I am dependent on the hello task!");
-});
+gulp.task("default", ["build"]);

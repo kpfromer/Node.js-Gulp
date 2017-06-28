@@ -1,16 +1,30 @@
 "use strict";
 
 const gulp = require("gulp"),
-    concat = require("gulp-concat");
+    concat = require("gulp-concat"),
+    pump = require("pump"),
+    uglify = require("gulp-uglify"),
+    rename = require("gulp-rename");
 
 gulp.task("concatScripts", function () {
     //order matters!
     //gulp.src = readable stream of data (a node thing)
-    gulp.src(["js/jquery.js",
-        "js/sticky/jquery.sticky.js",
-        "js/main.js"])
-        .pipe(concat("app.js"))//concats the readable stream of data into file app.js
-        .pipe(gulp.dest("js"));//sends app.js to js folder
+    pump([
+        gulp.src(["js/jquery.js",
+            "js/sticky/jquery.sticky.js",
+            "js/main.js"]),
+        concat("app.js"),
+        gulp.dest("js")
+    ]);
+});
+
+gulp.task("minifyScripts", ["concatScripts"], function () {
+    pump([
+        gulp.src('js/app.js'),
+        uglify(),
+        rename("app.min.js"),
+        gulp.dest('js')
+    ]);
 });
 
 // second param is the dependencies (things to run before running task)
